@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 
 namespace PRA_B4_FOTOKIOSK.magie
 {
-    public class ShopManager
+    public class ShopManager 
     {
 
         public static List<KioskProduct> Products = new List<KioskProduct>();    
