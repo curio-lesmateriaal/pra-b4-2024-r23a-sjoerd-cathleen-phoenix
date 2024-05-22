@@ -37,7 +37,7 @@ namespace PRA_B4_FOTOKIOSK.magie
             return (string)Instance.lbReceipt.Content;
         }
 
-        public static void AddShopReceipt(string text)
+        public static void AddShopReceipt(float text)
         {
             SetShopReceipt(GetShopReceipt() + text);
         }
@@ -73,15 +73,30 @@ namespace PRA_B4_FOTOKIOSK.magie
             return id;
         }
 
-        public static int? GetAmount()
+        public static float? GetAmount()
         {
-            int? id = null;
+            float? id = null;
             int amount = -1;
             if (int.TryParse(Instance.tbAmount.Text, out amount))
             {
                 id = amount;
             }
             return id;
+        }
+
+        public static float GetCheckout()
+        {
+            if (ShopManager.GetAmount() > 0  && ShopManager.GetFotoId() > 0) 
+            {
+                float checkout = (float)(ShopManager.GetSelectedProduct().Price * ShopManager.GetAmount());
+                return checkout;
+            }
+            else
+            {
+                return 0;
+            }
+            
+            
         }
     }
 }
