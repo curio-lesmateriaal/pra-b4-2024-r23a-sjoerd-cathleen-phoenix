@@ -23,11 +23,11 @@ namespace PRA_B4_FOTOKIOSK.controller
             ShopManager.SetShopReceipt("Eindbedrag\n€");
 
             // Vul de productlijst met producten
-            ShopManager.Products.Add(new KioskProduct() { Name = "Foto 10x15", Price = "2,55"});
-            ShopManager.Products.Add(new KioskProduct() { Name = "foto 20X30", Price = "4,95"});
-            ShopManager.Products.Add(new KioskProduct() { Name = "mok met foto", Price = "9,95" });
-            ShopManager.Products.Add(new KioskProduct() { Name = "Sleutelhanger met foto", Price = "6,12" });
-            ShopManager.Products.Add(new KioskProduct() { Name = "T-shirt met foto", Price = "11,99" });
+            ShopManager.Products.Add(new KioskProduct() { Name = "Foto 10x15", Price = 2.55f});
+            ShopManager.Products.Add(new KioskProduct() { Name = "foto 20X30", Price = 4.95f});
+            ShopManager.Products.Add(new KioskProduct() { Name = "mok met foto", Price = 9.95f });
+            ShopManager.Products.Add(new KioskProduct() { Name = "Sleutelhanger met foto", Price = 6.12f});
+            ShopManager.Products.Add(new KioskProduct() { Name = "T-shirt met foto", Price = 11.99f});
 
 
             foreach (KioskProduct product in ShopManager.Products)
