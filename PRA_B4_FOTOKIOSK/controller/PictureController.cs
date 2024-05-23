@@ -3,6 +3,7 @@ using PRA_B4_FOTOKIOSK.models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace PRA_B4_FOTOKIOSK.controller
 {
@@ -12,9 +13,9 @@ namespace PRA_B4_FOTOKIOSK.controller
         public static Home Window { get; set; }
 
         // De lijst met fotos die we laten zien
-        public List<KioskPhoto> PicturesToDisplay = new List<KioskPhoto>();
+        public List<KioskPhotoPair> PicturesToDisplay = new List<KioskPhotoPair>();
 
-        //directories voor elke dag
+        // Map to hold directories for each day
         private readonly Dictionary<DayOfWeek, string> dayDirectories = new Dictionary<DayOfWeek, string>
         {
             { DayOfWeek.Sunday, @"../../../fotos/0_Zondag" },
@@ -35,7 +36,7 @@ namespace PRA_B4_FOTOKIOSK.controller
             // Initializeer de lijst met fotos
             if (dayDirectories.TryGetValue(day, out string directory))
             {
-                LoadPicturesFromDirectory(directory);
+                LoadAndPairPictures(directory);
             }
             else
             {
@@ -43,10 +44,10 @@ namespace PRA_B4_FOTOKIOSK.controller
             }
 
             // Update de fotos
-            PictureManager.UpdatePictures(PicturesToDisplay);
+            PictureManager.UpdatePictures(PicturesToDisplay.SelectMany(pair => new[] { pair.FirstPhoto, pair.SecondPhoto }).ToList());
         }
 
-        private void LoadPicturesFromDirectory(string rootDir)
+        private void LoadAndPairPictures(string rootDir)
         {
             try
             {
@@ -54,14 +55,37 @@ namespace PRA_B4_FOTOKIOSK.controller
                 var lowerBound = now.AddMinutes(-30);
                 var upperBound = now.AddMinutes(-2);
 
+                var allPhotos = new List<(DateTime PhotoTime, string FilePath)>();
+
                 foreach (string file in Directory.GetFiles(rootDir, "*.jpg", SearchOption.AllDirectories))
                 {
                     if (TryParseDateTimeFromFileName(file, out DateTime photoDateTime))
                     {
                         if (photoDateTime >= lowerBound && photoDateTime <= upperBound)
                         {
-                            PicturesToDisplay.Add(new KioskPhoto() { Id = 0, Source = file });
+                            allPhotos.Add((photoDateTime, file));
                         }
+                    }
+                }
+
+                // Sorteer alle foto's op tijdstempel
+                var sortedPhotos = allPhotos.OrderBy(photo => photo.PhotoTime).ToList();
+
+                // Koppel foto's
+                for (int i = 0; i < sortedPhotos.Count - 1; i++)
+                {
+                    var currentPhoto = sortedPhotos[i];
+                    var nextPhoto = sortedPhotos[i + 1];
+
+                    if ((nextPhoto.PhotoTime - currentPhoto.PhotoTime).TotalSeconds == 60)
+                    {
+                        PicturesToDisplay.Add(new KioskPhotoPair
+                        {
+                            FirstPhoto = new KioskPhoto { Id = 0, Source = currentPhoto.FilePath },
+                            SecondPhoto = new KioskPhoto { Id = 0, Source = nextPhoto.FilePath }
+                        });
+
+                        i++; // Skip the next photo as it's already paired
                     }
                 }
             }
@@ -102,5 +126,12 @@ namespace PRA_B4_FOTOKIOSK.controller
         {
             // Refresh logic, if any
         }
+    }
+
+    // A class to hold paired photos
+    public class KioskPhotoPair
+    {
+        public KioskPhoto FirstPhoto { get; set; }
+        public KioskPhoto SecondPhoto { get; set; }
     }
 }
