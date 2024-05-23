@@ -14,7 +14,7 @@ namespace PRA_B4_FOTOKIOSK.controller
         // De lijst met fotos die we laten zien
         public List<KioskPhoto> PicturesToDisplay = new List<KioskPhoto>();
 
-        // Map to hold directories for each day
+        //directories voor elke dag
         private readonly Dictionary<DayOfWeek, string> dayDirectories = new Dictionary<DayOfWeek, string>
         {
             { DayOfWeek.Sunday, @"../../../fotos/0_Zondag" },
@@ -50,9 +50,19 @@ namespace PRA_B4_FOTOKIOSK.controller
         {
             try
             {
-                foreach (string file in Directory.GetFiles(rootDir, "*", SearchOption.AllDirectories))
+                var now = DateTime.Now;
+                var lowerBound = now.AddMinutes(-30);
+                var upperBound = now.AddMinutes(-2);
+
+                foreach (string file in Directory.GetFiles(rootDir, "*.jpg", SearchOption.AllDirectories))
                 {
-                    PicturesToDisplay.Add(new KioskPhoto() { Id = 0, Source = file });
+                    if (TryParseDateTimeFromFileName(file, out DateTime photoDateTime))
+                    {
+                        if (photoDateTime >= lowerBound && photoDateTime <= upperBound)
+                        {
+                            PicturesToDisplay.Add(new KioskPhoto() { Id = 0, Source = file });
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -62,10 +72,35 @@ namespace PRA_B4_FOTOKIOSK.controller
             }
         }
 
+        private bool TryParseDateTimeFromFileName(string filePath, out DateTime photoDateTime)
+        {
+            photoDateTime = default;
+
+            try
+            {
+                var fileName = Path.GetFileNameWithoutExtension(filePath);
+                var parts = fileName.Split('_');
+
+                if (parts.Length >= 3)
+                {
+                    var timePart = $"{parts[0]}:{parts[1]}:{parts[2]}";
+                    var currentDate = DateTime.Today; // Gebruik de huidige datum en voeg de tijd van de bestandsnaam toe
+                    photoDateTime = DateTime.Parse($"{currentDate.ToShortDateString()} {timePart}");
+                    return true;
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         // Wordt uitgevoerd wanneer er op de Refresh knop is geklikt
         public void RefreshButtonClick()
         {
-           
+            // Refresh logic, if any
         }
     }
 }
