@@ -37,7 +37,7 @@ namespace PRA_B4_FOTOKIOSK.magie
             return (string)Instance.lbReceipt.Content;
         }
 
-        public static void AddShopReceipt(float text)
+        public static void AddShopReceipt(string text)
         {
             SetShopReceipt(GetShopReceipt() + text);
         }
@@ -84,19 +84,29 @@ namespace PRA_B4_FOTOKIOSK.magie
             return id;
         }
 
-        public static float GetCheckout()
+        public static float GetTotal()
         {
             if (ShopManager.GetAmount() > 0  && ShopManager.GetFotoId() > 0) 
             {
-                float checkout = (float)(ShopManager.GetSelectedProduct().Price * ShopManager.GetAmount());
-                return checkout;
+                float total = (float)(ShopManager.GetSelectedProduct().Price * ShopManager.GetAmount());
+                return total;
             }
             else
             {
                 return 0;
             }
-            
-            
+        }
+
+        public static string GetCheckout()
+        {
+            if (ShopManager.GetAmount() > 0 && ShopManager.GetFotoId() > 0)
+            {
+                return ($"FotoNummer: {ShopManager.GetFotoId()} \nProductNaam: {ShopManager.GetSelectedProduct().Name} \nAantal: {ShopManager.GetAmount()} \nTotaal: €{ShopManager.GetTotal()}\n");
+            }
+            else 
+            {
+                return ("ongeldige item");
+            }
         }
     }
 }
