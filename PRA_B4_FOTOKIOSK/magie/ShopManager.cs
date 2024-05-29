@@ -11,10 +11,10 @@ using System.Windows.Media.Imaging;
 
 namespace PRA_B4_FOTOKIOSK.magie
 {
-    public class ShopManager 
+    public class ShopManager
     {
 
-        public static List<KioskProduct> Products = new List<KioskProduct>();    
+        public static List<KioskProduct> Products = new List<KioskProduct>();
         public static Home Instance { get; set; }
 
         public static void SetShopPriceList(string text)
@@ -86,7 +86,7 @@ namespace PRA_B4_FOTOKIOSK.magie
 
         public static float GetTotal()
         {
-            if (ShopManager.GetAmount() > 0  && ShopManager.GetFotoId() > 0) 
+            if (ShopManager.GetAmount() > 0 && ShopManager.GetFotoId() > 0)
             {
                 float total = (float)(ShopManager.GetSelectedProduct().Price * ShopManager.GetAmount());
                 return total;
@@ -103,7 +103,7 @@ namespace PRA_B4_FOTOKIOSK.magie
             {
                 return ($"FotoNummer: {ShopManager.GetFotoId()} \nProductNaam: {ShopManager.GetSelectedProduct().Name} \nAantal: {ShopManager.GetAmount()} \nTotaal: €{ShopManager.GetTotal()}\n");
             }
-            else 
+            else
             {
                 return ("ongeldige item");
             }
