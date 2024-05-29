@@ -49,40 +49,9 @@ namespace PRA_B4_FOTOKIOSK.controller
         // Wordt uitgevoerd wanneer er op de Save knop is geklikt
         public void SaveButtonClick()
         {
-            string receiptContent = GenerateReceiptContent();
-            SaveReceiptToFile(receiptContent);
-            try
-            {
-                SaveReceiptToFile(receiptContent);
-                Console.WriteLine("De bon is opgeslagen in bon.txt");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Fout bij het opslaan van de bon: {ex.Message}");
-            }
-        }
-
-        private string GenerateReceiptContent()
-        {
-            StringBuilder receiptBuilder = new StringBuilder();
-            receiptBuilder.AppendLine("Bon inhoud:");
-
-            float total = 0;
-
-            foreach (var product in ShopManager.Products)
-            {
-                receiptBuilder.AppendLine($"{product.Name}: €{product.Price}");
-                total += product.Price;
-            }
-
-            receiptBuilder.AppendLine($"Totaal: €{total}");
-            return receiptBuilder.ToString();
-        }
-
-        private void SaveReceiptToFile(string receiptContent)
-        {
             string filePath = "bon.txt";
-            File.WriteAllText(filePath, receiptContent);
+            File.WriteAllText(filePath, ShopManager.GetCheckout());
+            ShopManager.AddShopReceipt("De bon is opgeslagen.");
         }
     }
 }

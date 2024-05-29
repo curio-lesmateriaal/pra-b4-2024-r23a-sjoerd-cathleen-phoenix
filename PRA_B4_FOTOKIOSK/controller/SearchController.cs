@@ -16,6 +16,7 @@ namespace PRA_B4_FOTOKIOSK.controller
         
 
         // Start methode die wordt aangeroepen wanneer de zoek pagina opent.
+        // very veel code smell "Django"
         public void Start()
         {
 
