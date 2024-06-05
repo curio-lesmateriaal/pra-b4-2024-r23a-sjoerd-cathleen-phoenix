@@ -52,11 +52,5 @@ namespace PRA_B4_FOTOKIOSK.magie
         {
             SetSearchImageInfo(GetSearchImageInfo() + text);
         }
-
-        public static void ShowImageInfo(string imageId, DateTime timestamp)
-        {
-            string info = $"Afbeelding ID: {imageId}\nTijd: {timestamp.ToShortTimeString()}\nDatum: {timestamp.ToShortDateString()}";
-            SearchManager.SetSearchImageInfo(info);
-        }
     }
 }
