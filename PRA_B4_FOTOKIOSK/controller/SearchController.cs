@@ -60,7 +60,7 @@ namespace PRA_B4_FOTOKIOSK.controller
                             picture = file;
                             SearchManager.SetPicture(picture);
                             string[] id = nameParts[3].Split("d");
-                            SearchManager.SetSearchImageInfo($"tijd: {fileTime} id: {id[1]}");
+                            SearchManager.SetSearchImageInfo($"{fileTime} ID: {id[1]}");
                             found = true;
                             break;
                         }  
