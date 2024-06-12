@@ -84,11 +84,11 @@ namespace PRA_B4_FOTOKIOSK.magie
             return id;
         }
 
-        public static float GetTotal()
+        public static decimal GetTotal()
         {
             if (ShopManager.GetAmount() > 0 && ShopManager.GetFotoId() > 0)
             {
-                float total = (float)(ShopManager.GetSelectedProduct().Price * ShopManager.GetAmount());
+                decimal total = (decimal)(ShopManager.GetSelectedProduct().Price * ShopManager.GetAmount());
                 return total;
             }
             else
@@ -101,7 +101,7 @@ namespace PRA_B4_FOTOKIOSK.magie
         {
             if (ShopManager.GetAmount() > 0 && ShopManager.GetFotoId() > 0)
             {
-                return ($"FotoNummer: {ShopManager.GetFotoId()} \nProductNaam: {ShopManager.GetSelectedProduct().Name} \nAantal: {ShopManager.GetAmount()} \nTotaal: €{ShopManager.GetTotal()}\n");
+                return ($"FotoNummer: {ShopManager.GetFotoId()} \nProductNaam: {ShopManager.GetSelectedProduct().Name} \nAantal: {ShopManager.GetAmount()} \nTotaal: €{Math.Round(ShopManager.GetTotal(), 2)}\n\n");
             }
             else
             {
